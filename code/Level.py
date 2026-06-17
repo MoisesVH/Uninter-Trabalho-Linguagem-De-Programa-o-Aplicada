@@ -7,7 +7,7 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from code.Const import COLOR_FONT1, COLOR_FONT2, WINDOW_HEIGHT, MENU_OPTION, EVENT_ENEMY1, EVENT_ENEMY2, SPAWN_TIME1, \
-    SPAWN_TIME2, SPAWN_TIME3
+    SPAWN_TIME2, SPAWN_TIME3, EVENT_ENEMY3
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 
@@ -54,6 +54,9 @@ class Level:
 
                 if event.type == EVENT_ENEMY2:
                     self.entity_list.append(EntityFactory.get_entity('enemy2'))
+
+                if event.type == EVENT_ENEMY3:
+                    self.entity_list.append(EntityFactory.get_entity('enemy3'))
 
             self.level_text(16, f'{self.name} - Timeout: {self.timeout / 1000:.2f}s', COLOR_FONT2, (10, 5))
             self.level_text(16, f'fps: {clock.get_fps() :.0f}', COLOR_FONT2, (10, WINDOW_HEIGHT - 35))

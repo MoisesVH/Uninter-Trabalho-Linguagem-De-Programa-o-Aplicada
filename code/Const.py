@@ -4,7 +4,7 @@ import pygame
 COLOR_FONT1 = (175, 50, 175)
 COLOR_FONT2 = (255, 255, 255)
 
-#E
+# E
 ENTITY_SPEED = {
     'background_level1_1': 0,
     'background_level1_2': 2,
@@ -54,7 +54,6 @@ PLAYER_MOVE_RIGHT = {
 SPAWN_TIME1 = 5000
 SPAWN_TIME2 = 10000
 SPAWN_TIME3 = 40000
-
 
 # w
 WINDOW_HEIGHT = 324
