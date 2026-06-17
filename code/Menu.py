@@ -10,7 +10,7 @@ from code.Const import WINDOW_WIDTH, COLOR_FONT1, COLOR_FONT2, MENU_OPTION
 class Menu:
     def __init__(self, window):
         self.window = window
-        self.surf = pygame.image.load('./assets/background_menu.png')
+        self.surf = pygame.image.load('./assets/background_menu.png').convert_alpha()
         self.rect = self.surf.get_rect(left=0, top=0)
 
     def run(self, ):
