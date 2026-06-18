@@ -6,11 +6,13 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import COLOR_FONT1, COLOR_FONT2, WINDOW_HEIGHT, MENU_OPTION, EVENT_ENEMY1, EVENT_ENEMY2, SPAWN_TIME1, \
-    SPAWN_TIME2, SPAWN_TIME3, EVENT_ENEMY3
+from code.Const import COLOR_FONT2, WINDOW_HEIGHT, MENU_OPTION, EVENT_ENEMY1, EVENT_ENEMY2, SPAWN_TIME1, \
+    SPAWN_TIME2
+from code.Enemy import Enemy
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.EntityMediator import EntityMediator
+from code.Player import Player
 
 
 class Level:
@@ -26,7 +28,6 @@ class Level:
 
         pygame.time.set_timer(EVENT_ENEMY1, SPAWN_TIME1)
         pygame.time.set_timer(EVENT_ENEMY2, SPAWN_TIME2)
-        pygame.time.set_timer(EVENT_ENEMY3, SPAWN_TIME3)
 
         self.timeout = 20000  # 20 segundds
 
@@ -41,6 +42,10 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
+                if isinstance(ent, (Player, Enemy)):
+                    shot = ent.shot()
+                    if shot is not None:
+                        self.entity_list.append(shot)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -52,9 +57,6 @@ class Level:
 
                 if event.type == EVENT_ENEMY2:
                     self.entity_list.append(EntityFactory.get_entity('enemy2'))
-
-                if event.type == EVENT_ENEMY3:
-                    self.entity_list.append(EntityFactory.get_entity('enemy3'))
 
             self.level_text(16, f'{self.name} - Timeout: {self.timeout / 1000:.2f}s', COLOR_FONT2, (10, 5))
             self.level_text(16, f'fps: {clock.get_fps() :.0f}', COLOR_FONT2, (10, WINDOW_HEIGHT - 35))
