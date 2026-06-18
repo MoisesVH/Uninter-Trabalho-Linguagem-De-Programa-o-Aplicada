@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import random
 
-from code.Background import Background
 from code.Const import WINDOW_WIDTH, WINDOW_HEIGHT, MENU_OPTION
-from code.Enemy import Enemy
+from code.Background import Background
+from code.Menu import Menu
 from code.Player import Player
+from code.Enemy import Enemy
+
 
 
 class EntityFactory:

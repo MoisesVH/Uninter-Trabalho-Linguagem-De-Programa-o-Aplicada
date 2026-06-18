@@ -10,12 +10,10 @@ from code.Const import COLOR_FONT1, COLOR_FONT2, WINDOW_HEIGHT, MENU_OPTION, EVE
     SPAWN_TIME2, SPAWN_TIME3, EVENT_ENEMY3
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
+from code.EntityMediator import EntityMediator
 
 
 class Level:
-
-    game_mode = None
-
     def __init__(self, window, name, game_mode):
         self.window = window
         self.name = name
@@ -61,6 +59,9 @@ class Level:
             self.level_text(16, f'{self.name} - Timeout: {self.timeout / 1000:.2f}s', COLOR_FONT2, (10, 5))
             self.level_text(16, f'fps: {clock.get_fps() :.0f}', COLOR_FONT2, (10, WINDOW_HEIGHT - 35))
             self.level_text(16, f'entidades: {len(self.entity_list)}', COLOR_FONT2, (10, WINDOW_HEIGHT - 20))
+
+            EntityMediator.verify_collision(entity_list=self.entity_list)
+            EntityMediator.verify_health(entity_list=self.entity_list)
 
             pygame.display.flip()
 

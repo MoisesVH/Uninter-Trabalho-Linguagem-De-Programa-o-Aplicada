@@ -5,6 +5,25 @@ COLOR_FONT1 = (175, 50, 175)
 COLOR_FONT2 = (255, 255, 255)
 
 # E
+ENTITY_HEALTH = {
+    'background_level1_1': 999,
+    'background_level1_2': 999,
+    'background_level1_3': 999,
+    'background_level1_4': 999,
+
+    'background_level2_1': 999,
+    'background_level2_2': 999,
+    'background_level2_3': 999,
+    'background_level2_4': 999,
+
+    'player1': 100,
+    'player2': 100,
+
+    'enemy1': 40,
+    'enemy2': 60,
+    'enemy3': 80,
+}
+
 ENTITY_SPEED = {
     'background_level1_1': 0,
     'background_level1_2': 2,
@@ -51,9 +70,9 @@ PLAYER_MOVE_RIGHT = {
 }
 
 # s
-SPAWN_TIME1 = 5000
+SPAWN_TIME1 = 10000
 SPAWN_TIME2 = 10000
-SPAWN_TIME3 = 40000
+SPAWN_TIME3 = 5000
 
 # w
 WINDOW_HEIGHT = 324
