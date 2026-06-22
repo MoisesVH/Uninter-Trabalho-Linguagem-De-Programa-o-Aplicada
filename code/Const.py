@@ -5,6 +5,53 @@ COLOR_FONT1 = (175, 50, 175)
 COLOR_FONT2 = (255, 255, 255)
 
 # E
+ENTINTY_SCORE = {
+'background_level1_1': 0,
+    'background_level1_2': 0,
+    'background_level1_3': 0,
+    'background_level1_4': 0,
+
+    'background_level2_1': 0,
+    'background_level2_2': 0,
+    'background_level2_3': 0,
+    'background_level2_4': 0,
+
+    'player1': 0,
+    'player2': 0,
+
+    'enemy1': 50,
+    'enemy2': 100,
+
+    'player1_shot': 0,
+    'player2_shot': 0,
+
+    'enemy1_shot': 0,
+    'enemy2_shot': 0,
+}
+ENTITY_DAMAGE = {
+    'background_level1_1': 0,
+    'background_level1_2': 0,
+    'background_level1_3': 0,
+    'background_level1_4': 0,
+
+    'background_level2_1': 0,
+    'background_level2_2': 0,
+    'background_level2_3': 0,
+    'background_level2_4': 0,
+
+    'player1': 1,
+    'player2': 1,
+
+    'enemy1': 1,
+    'enemy2': 1,
+
+    'player1_shot': 20,
+    'player2_shot': 20,
+
+    'enemy1_shot': 20,
+    'enemy2_shot': 40,
+}
+
 ENTITY_HEALTH = {
     'background_level1_1': 999,
     'background_level1_2': 999,
@@ -20,8 +67,7 @@ ENTITY_HEALTH = {
     'player2': 200,
 
     'enemy1': 60,
-    'enemy2': 80,
-    'enemy3': 140,
+    'enemy2': 100,
 
     'player1_shot': 1,
     'player2_shot': 1,

@@ -47,6 +47,11 @@ class Level:
                     if shot is not None:
                         self.entity_list.append(shot)
 
+                if ent.name == 'player1':
+                    self.level_text(16, f'Player 1 - Health: {ent.health} | SCORE: {ent.score}', COLOR_FONT2, (10, 30))
+                if ent.name == 'player2':
+                    self.level_text(16, f'Player 2 - Health: {ent.health} | SCORE: {ent.score}', COLOR_FONT2, (10, 60))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
