@@ -82,6 +82,11 @@ ENTITY_SPEED = {
     'background_level1_2': 2,
     'background_level1_3': 1,
     'background_level1_4': 3,
+    'background_level2_1': 0,
+    'background_level2_2': 0,
+    'background_level2_3': 1,
+    'background_level2_4': 3,
+
 
     'player1': 3,
     'player2': 3,
@@ -108,6 +113,7 @@ ENTITY_SHOT_DELAY = {
 
 EVENT_ENEMY1 = pygame.USEREVENT + 0
 EVENT_ENEMY2 = pygame.USEREVENT + 1
+EVENT_TIMEOUT = pygame.USEREVENT + 2
 
 # M
 MENU_OPTION = [
@@ -147,6 +153,10 @@ PLAYER_SHOT = {
 # s
 SPAWN_TIME1 = 5000
 SPAWN_TIME2 = 7000
+
+# T
+TIMEOUT_STEP = 100 # 1 milisegundo
+TIMEOUT_LEVEL = 20000 # 20 segundos
 
 # w
 WINDOW_HEIGHT = 324
