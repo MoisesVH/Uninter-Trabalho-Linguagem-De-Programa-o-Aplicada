@@ -5,7 +5,7 @@ from pygame import Surface, Rect
 from pygame.font import Font
 
 from code.DBProxy import DBProxy
-from code.Const import WINDOW_WIDTH, COLOR_FONT2, COLOR_FONT1
+from code.Const import WINDOW_WIDTH, COLOR_FONT2
 from code.Menu import Menu
 
 
@@ -58,7 +58,7 @@ class Record:
 
         self.window.blit(source=self.surf, dest=self.rect)
 
-        self.record_text(48, 'TOP 10 RECORDS', COLOR_FONT1, (WINDOW_WIDTH / 2, 50))
+        self.record_text(48, 'TOP 10 RECORDS', COLOR_FONT2, (WINDOW_WIDTH / 2, 50))
 
         db_proxy = DBProxy('DBRecords')
         list_record = db_proxy.retrieve_top10()
@@ -70,7 +70,7 @@ class Record:
             self.record_text(20, f'{name}        {record / 1000:.2f}        {date}', COLOR_FONT2,
                              (WINDOW_WIDTH / 2, 60 + 20 * i))
 
-        self.record_text(20, 'Press the ESC key to return to the menu', COLOR_FONT2, (WINDOW_WIDTH / 2, 300))
+        self.record_text(20, 'Press the ESC key to return to the menu', COLOR_FONT2, (WINDOW_WIDTH / 2, 310))
 
         while True:
             for event in pygame.event.get():
