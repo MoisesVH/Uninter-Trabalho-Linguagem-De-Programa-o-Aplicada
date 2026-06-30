@@ -5,6 +5,7 @@ import pygame
 from code.Const import WINDOW_WIDTH, WINDOW_HEIGHT, MENU_OPTION
 from code.Level import Level
 from code.Menu import Menu
+from code.Record import Record
 
 
 class Game:
@@ -15,20 +16,20 @@ class Game:
     def run(self, ):
 
         while True:
+            record = Record(self.window)
             menu = Menu(self.window)
             menu_return = menu.run()
 
-            if menu_return in [MENU_OPTION[0], MENU_OPTION[1], MENU_OPTION[2]]:
-                player_score = [0, 0] # [player1, player2]
-                level = Level(self.window, 'level1', menu_return, player_score)
-                level_return = level.run(player_score)
-                if level_return:
-                    level = Level(self.window, 'level2', menu_return, player_score)
-                    level_return = level.run(player_score)
+            if menu_return in [MENU_OPTION[0]]:
+                player_record = [0] # [player1]
+                level = Level(self.window, 'level', menu_return, player_record)
+                level_return = level.run(player_record)
+                player_record[0] = level_return
+                record.save(menu_return, player_record)
 
-            elif menu_return == MENU_OPTION[3]:
-                pass
+            elif menu_return == MENU_OPTION[1]:
+                record.show()
 
-            elif menu_return == MENU_OPTION[4]:
+            elif menu_return == MENU_OPTION[2]:
                 pygame.quit()  # fechando a janela
                 quit()  # encerrando o pygame

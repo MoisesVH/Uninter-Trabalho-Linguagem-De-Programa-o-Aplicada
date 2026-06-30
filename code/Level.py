@@ -5,11 +5,10 @@ from locale import setlocale
 
 import pygame
 from pygame import Surface, Rect
-from pygame.font import Font
+from pygame.font import Font, init
 
-from code.Const import COLOR_FONT2, WINDOW_HEIGHT, MENU_OPTION, EVENT_ENEMY1, EVENT_ENEMY2, SPAWN_TIME1, \
-    SPAWN_TIME2, EVENT_TIMEOUT, TIMEOUT_STEP, TIMEOUT_LEVEL
-from code.Enemy import Enemy
+from code.Const import COLOR_FONT2, WINDOW_HEIGHT, EVENT_OBSTACLE, SPAWN_TIME, \
+    EVENT_TIMEOUT, TIMEOUT_STEP, TIMER_LEVEL, WINDOW_WIDTH
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.EntityMediator import EntityMediator
@@ -17,90 +16,91 @@ from code.Player import Player
 
 
 class Level:
-    def __init__(self, window: Surface, name: str, game_mode: str, player_score: list[int]):
+
+    def __init__(self, window: Surface, name: str, game_mode: str, player_record: list[int]):
         self.window = window
         self.name = name
         self.game_mode = game_mode
-        self.timeout = TIMEOUT_LEVEL
+        self.timer = TIMER_LEVEL
         self.entity_list: list[Entity] = []
-        self.entity_list.extend(EntityFactory.get_entity(f'background_{self.name}_'))
-        player = EntityFactory.get_entity('player1')
-        player.score = player_score[0]
+        self.entity_list.append(EntityFactory.get_entity(f'background'))
+        player = EntityFactory.get_entity('player')
+        player_record = player_record[0]
         self.entity_list.append(player)
-        if game_mode in [MENU_OPTION[1], MENU_OPTION[2]]:
-            player = EntityFactory.get_entity('player2')
-            player.score = player_score[1]
-            self.entity_list.append(player)
 
-        pygame.time.set_timer(EVENT_ENEMY1, SPAWN_TIME1)
-        pygame.time.set_timer(EVENT_ENEMY2, SPAWN_TIME2)
+        pygame.time.set_timer(EVENT_OBSTACLE, SPAWN_TIME)
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
 
     def run(self, player_score: list[int]):
+        self.start()
+
         pygame.mixer_music.load(f'./assets/{self.name}.wav')
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
 
         while True:
-            clock.tick(60)
+            clock.tick(30)
 
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
-                if isinstance(ent, (Player, Enemy)):
-                    shot = ent.shot()
-                    if shot is not None:
-                        self.entity_list.append(shot)
-
-                if ent.name == 'player1':
-                    self.level_text(16, f'Player 1 - Health: {ent.health} | SCORE: {ent.score}', COLOR_FONT2, (10, 30))
-                if ent.name == 'player2':
-                    self.level_text(16, f'Player 2 - Health: {ent.health} | SCORE: {ent.score}', COLOR_FONT2, (10, 60))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        for ent in self.entity_list:
+                            if ent.name == 'player':
+                                ent.jump()
 
-                if event.type == EVENT_ENEMY1:
-                    self.entity_list.append(EntityFactory.get_entity('enemy1'))
-
-                if event.type == EVENT_ENEMY2:
-                    self.entity_list.append(EntityFactory.get_entity('enemy2'))
+                if event.type == EVENT_OBSTACLE:
+                    self.entity_list.extend(EntityFactory.get_entity('pipe_'))
 
                 if event.type == EVENT_TIMEOUT:
-                    self.timeout -= TIMEOUT_STEP
-                    if self.timeout <= TIMEOUT_LEVEL / 2:
-                        pygame.time.set_timer(EVENT_ENEMY1, (SPAWN_TIME1 / 2))
-                        pygame.time.set_timer(EVENT_ENEMY2, (SPAWN_TIME2 -2))
-
-                    if self.timeout <= 0:
-                        for ent in self.entity_list:
-                            if isinstance(ent, Player) and ent.name == 'player1':
-                                player_score[0] = ent.score
-                            if isinstance(ent, Player) and ent.name == 'player2':
-                                player_score[0] = ent.score
-                        return True
+                    self.timer += TIMEOUT_STEP
 
             found_player = False
+
             for ent in self.entity_list:
                 if isinstance(ent, Player):
                     found_player = True
 
             if not found_player:
-                return False
+                return self.timer
 
-            self.level_text(16, f'{self.name} - Timeout: {self.timeout / 1000:.2f}s', COLOR_FONT2, (10, 5))
-            self.level_text(16, f'fps: {clock.get_fps() :.0f}', COLOR_FONT2, (10, WINDOW_HEIGHT - 35))
-            self.level_text(16, f'entidades: {len(self.entity_list)}', COLOR_FONT2, (10, WINDOW_HEIGHT - 20))
+            self.level_text(16, f'Timer: {self.timer / 1000:.2f}s', COLOR_FONT2, (40, 10))
 
             EntityMediator.verify_collision(entity_list=self.entity_list)
             EntityMediator.verify_health(entity_list=self.entity_list)
 
             pygame.display.flip()
 
-    def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
+    def level_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
-        text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
+        text_rect: Rect = text_surf.get_rect(center=text_center_pos)
         self.window.blit(source=text_surf, dest=text_rect)
+
+    def start(self):
+
+
+        start = 0
+        while start < 1:
+            for ent in self.entity_list:
+                self.window.blit(source=ent.surf, dest=ent.rect)
+
+            self.level_text(20, 'Press the SPACE key to start the game', COLOR_FONT2,
+                            (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        for ent in self.entity_list:
+                            if ent.name == 'player':
+                                ent.jump()
+
+                        start += 1
+
+            pygame.display.flip()

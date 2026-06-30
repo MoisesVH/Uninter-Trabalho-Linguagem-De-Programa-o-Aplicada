@@ -1,41 +1,29 @@
 from os import remove
 
-from code.Const import WINDOW_WIDTH
-from code.Enemy import Enemy
-from code.EnemyShot import EnemyShot
+from code.Const import WINDOW_WIDTH, WINDOW_HEIGHT
+from code.Obstacle import Obstacle
 from code.Entity import Entity
 from code.Player import Player
-from code.PlayerShot import PlayerShot
 
 
 class EntityMediator:
 
     @staticmethod
     def __verify_collision_window(ent: Entity):
-        if isinstance(ent, (Enemy, EnemyShot)):
+        if isinstance(ent, Obstacle):
             if ent.rect.right < 0:
                 ent.health = 0
-
-        if isinstance(ent, PlayerShot):
-            if ent.rect.left >= WINDOW_WIDTH:
+        if isinstance(ent, Player):
+            if ent.rect.bottom > WINDOW_HEIGHT:
                 ent.health = 0
-
         pass
 
     @staticmethod
     def __verify_collision_entity(ent1: Entity, ent2: Entity):
         valid_instance = False
-        if isinstance(ent1, PlayerShot) and isinstance(ent2, Enemy):
+        if isinstance(ent1, Player) and isinstance(ent2, Obstacle):
             valid_instance = True
-        elif isinstance(ent1, Enemy) and isinstance(ent2, PlayerShot):
-            valid_instance = True
-        elif isinstance(ent1, EnemyShot) and isinstance(ent2, Player):
-            valid_instance = True
-        elif isinstance(ent1, Player) and isinstance(ent2, EnemyShot):
-            valid_instance = True
-        elif isinstance(ent1, Player) and isinstance(ent2, Enemy):
-            valid_instance = True
-        elif isinstance(ent1, Enemy) and isinstance(ent2, Player):
+        elif isinstance(ent1, Obstacle) and isinstance(ent2, Player):
             valid_instance = True
 
         if valid_instance:
@@ -43,15 +31,12 @@ class EntityMediator:
                 ent1.health -= ent2.damage
                 ent2.health -= ent1.damage
 
-                ent1.last_dmg = ent2.name
-                ent2.last_dmg = ent1.name
-
     @staticmethod
-    def __give_score(enemy: Enemy, entity_list: list[Entity]):
-        if enemy.last_dmg == 'player1_shot' or enemy.last_dmg == 'player1':
-            for ent in entity_list:
-                if ent.name == 'player1':
-                    ent.score += enemy.score
+    def __give_score(player: Player, entity_list: list[Entity]):
+        for ent in entity_list:
+            if isinstance(ent, Obstacle):
+                if player.rect.centerx > ent.rect.centerx:
+                    player.score += ent.score
         pass
 
     @staticmethod
@@ -66,7 +51,5 @@ class EntityMediator:
     def verify_health(entity_list: list[Entity]):
         for ent in entity_list:
             if ent.health <= 0:
-                if isinstance(ent, Enemy):
-                    EntityMediator.__give_score(ent, entity_list)
                 entity_list.remove(ent)
 

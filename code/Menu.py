@@ -10,8 +10,10 @@ from code.Const import WINDOW_WIDTH, COLOR_FONT1, COLOR_FONT2, MENU_OPTION
 class Menu:
     def __init__(self, window):
         self.window = window
-        self.surf = pygame.image.load('./assets/background_menu.png').convert_alpha()
-        self.rect = self.surf.get_rect(left=0, top=0)
+        self.surf_bg = pygame.image.load('./assets/background.png').convert_alpha()
+        self.rect_bg = self.surf_bg.get_rect(left=0, top=0)
+        self.surf_lg = pygame.image.load('./assets/name_logo.png').convert_alpha()
+        self.rect_lg = self.surf_lg.get_rect(centerx=(WINDOW_WIDTH / 2), top=24)
 
     def run(self, ):
         option_select = 0
@@ -19,15 +21,14 @@ class Menu:
         pygame.mixer.music.play(-1)
 
         while True:
-            self.window.blit(source=self.surf, dest=self.rect)
-            self.menu_text(50, 'Sky Shot', (0, 0, 0), ((WINDOW_WIDTH / 2) - 2, 77))
-            self.menu_text(50, 'Sky Shot', COLOR_FONT1, ((WINDOW_WIDTH / 2), 75))
+            self.window.blit(source=self.surf_bg, dest=self.rect_bg)
+            self.window.blit(source=self.surf_lg, dest=self.rect_lg)
 
             for i in range(len(MENU_OPTION)):
                 if i == option_select:
-                    self.menu_text(27, MENU_OPTION[i], COLOR_FONT1, ((WINDOW_WIDTH / 2), 175 + 23 * i))
+                    self.menu_text(27, MENU_OPTION[i], COLOR_FONT1, ((WINDOW_WIDTH / 2), 250 + 23 * i))
                 else:
-                    self.menu_text(25, MENU_OPTION[i], COLOR_FONT2, ((WINDOW_WIDTH / 2), 175 + 23 * i))
+                    self.menu_text(25, MENU_OPTION[i], COLOR_FONT2, ((WINDOW_WIDTH / 2), 250 + 23 * i))
 
             # Checando todos os eventos
             for event in pygame.event.get():
@@ -36,15 +37,15 @@ class Menu:
                     quit()  # encerrando o pygame
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_DOWN: # tecla para baixa
+                    if event.key == pygame.K_DOWN:  # tecla para baixa
                         option_select += 1
-                        if option_select > len(MENU_OPTION)-1:
+                        if option_select > len(MENU_OPTION) - 1:
                             option_select = 0
 
-                    if event.key == pygame.K_UP: # tecla para cima
+                    if event.key == pygame.K_UP:  # tecla para cima
                         option_select -= 1
                         if option_select < 0:
-                            option_select = len(MENU_OPTION)-1
+                            option_select = len(MENU_OPTION) - 1
 
                     if event.key == pygame.K_RETURN:
                         return MENU_OPTION[option_select]
